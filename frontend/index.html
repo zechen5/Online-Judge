@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoJudge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">&lt;/&gt;</span>
+        <span class="brand-text">AlgoJudge</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-link is-active" data-view="home">Home</button>
+        <button class="nav-link" data-view="problems">Problems</button>
+        <button class="nav-link" data-view="status">Status</button>
+      </nav>
+      <div class="actions">
+        <button id="auth-button" class="ghost-button">Login</button>
+        <div id="profile-chip" class="profile-chip hidden"></div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="hero" data-panel="home">
+        <div class="hero-copy">
+          <p class="eyebrow">AI-assisted online judge</p>
+          <h1>Clean judging, faster feedback, less ceremony.</h1>
+          <p class="hero-text">
+            A lightweight judge workspace with polished problem browsing,
+            submission tracking, and an admin-ready upload flow.
+          </p>
+          <div class="hero-actions">
+            <button class="primary-button" data-view-target="problems">Browse Problems</button>
+            <button class="ghost-button" id="open-auth-inline">Sign In</button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">Judge Mode</span>
+              <strong>Stubbed AC</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Languages</span>
+              <strong>C++ / Java / Python</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Access</span>
+              <strong>JWT + Role Guard</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Frontend</span>
+              <strong>Vanilla HTML / CSS / JS</strong>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace hidden" data-panel="problems">
+        <div class="workspace-header">
+          <div>
+            <p class="eyebrow">Problem Set</p>
+            <h2>Problem board</h2>
+          </div>
+          <button id="upload-button" class="primary-button hidden">Upload Problem</button>
+        </div>
+
+        <div class="board">
+          <div class="toolbar">
+            <div class="search-box">
+              <span class="search-icon">&#128269;</span>
+              <input id="search-input" type="search" placeholder="Search problems...">
+            </div>
+            <div id="feedback-pill" class="feedback-pill">Public problems only</div>
+          </div>
+          <div class="table-shell">
+            <table class="problem-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Time Limit</th>
+                  <th>Memory Limit</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="problem-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="problem-detail" class="detail-card hidden"></div>
+      </section>
+
+      <section class="status-grid hidden" data-panel="status">
+        <article class="status-card">
+          <span class="metric-label">Problems</span>
+          <strong id="status-problems">-</strong>
+        </article>
+        <article class="status-card">
+          <span class="metric-label">Submissions</span>
+          <strong id="status-submissions">-</strong>
+        </article>
+        <article class="status-card">
+          <span class="metric-label">Pending Judges</span>
+          <strong id="status-pending">-</strong>
+        </article>
+        <article class="status-card">
+          <span class="metric-label">Judger</span>
+          <strong id="status-judger">stubbed</strong>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="auth-dialog" class="dialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">Account</p>
+          <h3>Authenticate</h3>
+        </div>
+        <button class="icon-button" value="cancel">×</button>
+      </div>
+
+      <div class="tabs">
+        <button id="login-tab" class="tab-button is-active" type="button">Login</button>
+        <button id="register-tab" class="tab-button" type="button">Register</button>
+      </div>
+
+      <label class="field">
+        <span>Username</span>
+        <input id="auth-username" type="text" placeholder="admin">
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input id="auth-password" type="password" placeholder="admin123456">
+      </label>
+
+      <p id="auth-hint" class="hint">Default admin: <code>admin / admin123456</code></p>
+      <p id="auth-message" class="message"></p>
+
+      <button id="auth-submit" class="primary-button wide" type="button">Login</button>
+    </form>
+  </dialog>
+
+  <dialog id="upload-dialog" class="dialog">
+    <form method="dialog" class="dialog-card dialog-wide">
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">Admin</p>
+          <h3>Upload problem</h3>
+        </div>
+        <button class="icon-button" value="cancel">×</button>
+      </div>
+
+      <div class="grid-two">
+        <label class="field">
+          <span>Title</span>
+          <input id="problem-title" type="text" placeholder="Two Sum">
+        </label>
+        <label class="field">
+          <span>Time Limit (ms)</span>
+          <input id="problem-time" type="number" value="1000">
+        </label>
+      </div>
+
+      <div class="grid-two">
+        <label class="field">
+          <span>Memory Limit (MB)</span>
+          <input id="problem-memory" type="number" value="256">
+        </label>
+        <label class="field">
+          <span>Sample Input</span>
+          <input id="sample-input" type="text" placeholder="1 2">
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Description</span>
+        <textarea id="problem-description" rows="6" placeholder="Describe the problem..."></textarea>
+      </label>
+
+      <label class="field">
+        <span>Sample Output</span>
+        <input id="sample-output" type="text" placeholder="3">
+      </label>
+
+      <p id="upload-message" class="message"></p>
+      <button id="upload-submit" class="primary-button wide" type="button">Publish Problem</button>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
