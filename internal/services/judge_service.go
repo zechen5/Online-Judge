@@ -1,8 +1,12 @@
-// Package service contains business rules and cross-repository orchestration.
-// service 包承载业务规则以及跨仓储的编排逻辑。
+// Package services contains business rules and cross-repository orchestration.
+// services 包承载业务规则以及跨仓储的编排逻辑。
 package services
 
-import "online-judge-backend/internal/models"
+import (
+	"context"
+
+	"online-judge-backend/internal/models"
+)
 
 // JudgeResult is the normalized output shape returned by any judger backend.
 // JudgeResult 是任意判题后端都应返回的统一结果结构。
@@ -16,7 +20,7 @@ type JudgeResult struct {
 // Evaluator abstracts the concrete judge implementation behind the service layer.
 // Evaluator 抽象了具体判题实现，使服务层不依赖底层执行细节。
 type Evaluator interface {
-	Evaluate(problem *models.Problem, submission *models.Submission, testCases []models.TestCase) (JudgeResult, error)
+	Evaluate(ctx context.Context, problem *models.Problem, submission *models.Submission, testCases []models.TestCase) (JudgeResult, error)
 }
 
 // JudgeService is a thin wrapper that keeps the evaluator injectable.
@@ -33,6 +37,6 @@ func NewJudgeService(evaluator Evaluator) *JudgeService {
 
 // Evaluate delegates the judging work to the configured evaluator.
 // Evaluate 把判题工作转发给当前配置的判题实现。
-func (s *JudgeService) Evaluate(problem *models.Problem, submission *models.Submission, testCases []models.TestCase) (JudgeResult, error) {
-	return s.evaluator.Evaluate(problem, submission, testCases)
+func (s *JudgeService) Evaluate(ctx context.Context, problem *models.Problem, submission *models.Submission, testCases []models.TestCase) (JudgeResult, error) {
+	return s.evaluator.Evaluate(ctx, problem, submission, testCases)
 }

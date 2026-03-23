@@ -72,7 +72,7 @@ func (h *ProblemHandler) GetProblem(c *gin.Context) {
 		return
 	}
 
-	problem, err := h.service.Get(uint(id))
+	problem, err := h.service.GetPublished(uint(id))
 	if err != nil {
 		status := http.StatusInternalServerError
 		if h.service.IsNotFound(err) {

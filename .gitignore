@@ -1,2 +1,8 @@
 app.db
 .tools/
+artifacts/judge-images/*.tar
+logs/
+.server.stdout.log
+.server.stderr.log
+server.out.log
+server.err.log

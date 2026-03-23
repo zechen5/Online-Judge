@@ -1,8 +1,9 @@
-// Package handler adapts HTTP requests and responses to service-layer calls.
-// handler 包负责把 HTTP 请求与响应适配到服务层调用上。
+// Package handlers adapts HTTP requests and responses to service-layer calls.
+// handlers 包负责把 HTTP 请求与响应适配到服务层调用上。
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -15,14 +16,10 @@ type SubmissionHandler struct {
 	service *services.SubmissionService
 }
 
-// NewSubmissionHandler constructs the submission HTTP adapter.
-// NewSubmissionHandler 构造提交相关的 HTTP 适配器。
 func NewSubmissionHandler(service *services.SubmissionService) *SubmissionHandler {
 	return &SubmissionHandler{service: service}
 }
 
-// CreateSubmission receives source code, triggers judging, and returns the row.
-// CreateSubmission 接收源码、触发判题，并返回提交记录。
 func (h *SubmissionHandler) CreateSubmission(c *gin.Context) {
 	var req services.CreateSubmissionInput
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -36,14 +33,16 @@ func (h *SubmissionHandler) CreateSubmission(c *gin.Context) {
 
 	submission, err := h.service.Create(req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		status := http.StatusBadRequest
+		if errors.Is(err, services.ErrJudgeQueueUnavailable) {
+			status = http.StatusServiceUnavailable
+		}
+		c.JSON(status, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, submission)
+	c.JSON(http.StatusAccepted, submission)
 }
 
-// GetSubmission returns the latest stored view of a submission.
-// GetSubmission 返回当前存储中的提交结果视图。
 func (h *SubmissionHandler) GetSubmission(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
@@ -63,8 +62,21 @@ func (h *SubmissionHandler) GetSubmission(c *gin.Context) {
 	c.JSON(http.StatusOK, submission)
 }
 
-// GetLeaderboard returns the top-three ranking for a problem.
-// GetLeaderboard 返回指定题目的前三排行榜。
+func (h *SubmissionHandler) ListSubmissions(c *gin.Context) {
+	user := CurrentUser(c)
+	if user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	items, err := h.service.ListRecent(user.ID, 20)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"items": items})
+}
+
 func (h *SubmissionHandler) GetLeaderboard(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {

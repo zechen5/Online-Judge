@@ -6,11 +6,14 @@ import "time"
 
 const (
 	// ProblemStatusPending means the problem still awaits review.
-	// ProblemStatusPending 表示题目仍在待审核状态。
+	// ProblemStatusPending 表示题目仍处于待审核状态。
 	ProblemStatusPending = 0
-	// ProblemStatusPublished means the problem is visible for submission.
-	// ProblemStatusPublished 表示题目已发布，可供提交。
+	// ProblemStatusPublished means the problem is visible for browsing and submission.
+	// ProblemStatusPublished 表示题目已发布，可被浏览和提交。
 	ProblemStatusPublished = 1
+	// ProblemStatusHidden means the problem is intentionally hidden from public views.
+	// ProblemStatusHidden 表示题目已存在，但被刻意隐藏，不对公众展示。
+	ProblemStatusHidden = 2
 )
 
 type Problem struct {
@@ -29,14 +32,14 @@ type Problem struct {
 	// MemoryLimit is the submission memory ceiling.
 	// MemoryLimit 是提交运行时的内存上限。
 	MemoryLimit int `gorm:"not null" json:"memory_limit"`
-	// Status controls whether the problem is public or pending review.
-	// Status 控制题目是公开状态还是待审核状态。
+	// Status controls whether the problem is public, pending review, or hidden.
+	// Status 控制题目是公开、待审核还是隐藏。
 	Status int `gorm:"default:0;not null" json:"status"`
 	// CreatorID links the problem back to its uploader.
 	// CreatorID 把题目关联回上传者。
 	CreatorID uint `gorm:"index;not null" json:"creator_id"`
 	// TestCases holds both sample and hidden cases.
-	// TestCases 同时包含示例用例和隐藏用例。
+	// TestCases 同时包含样例和隐藏测试用例。
 	TestCases []TestCase `json:"test_cases,omitempty"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`

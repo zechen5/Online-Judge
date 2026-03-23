@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AlgoJudge</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
   <div class="shell">
@@ -25,38 +25,120 @@
     </header>
 
     <main class="layout">
-      <section class="hero" data-panel="home">
-        <div class="hero-copy">
-          <p class="eyebrow">AI-assisted online judge</p>
-          <h1>Clean judging, faster feedback, less ceremony.</h1>
-          <p class="hero-text">
-            A lightweight judge workspace with polished problem browsing,
-            submission tracking, and an admin-ready upload flow.
-          </p>
-          <div class="hero-actions">
-            <button class="primary-button" data-view-target="problems">Browse Problems</button>
-            <button class="ghost-button" id="open-auth-inline">Sign In</button>
+      <section class="home-shell" data-panel="home">
+        <div class="home-banner">
+          <div class="home-banner-copy">
+            <p class="eyebrow">AI-assisted online judge</p>
+            <h1>Build, submit, and inspect every run in one place.</h1>
+            <p class="hero-text">
+              AlgoJudge keeps the interface quiet and the workflow fast: browse problems,
+              submit code, review recent attempts, and manage content without extra ceremony.
+            </p>
+            <div class="hero-actions">
+              <button class="primary-button" data-view-target="problems">Browse Problems</button>
+              <button class="ghost-button" id="open-auth-inline">Sign In</button>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="metric-grid">
+              <article class="metric-card">
+                <span class="metric-label">Judge Mode</span>
+                <strong>Stubbed AC</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Languages</span>
+                <strong>C++ / Java / Python</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Access</span>
+                <strong>JWT + Role Guard</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Workflow</span>
+                <strong>Problems + Status + Admin</strong>
+              </article>
+            </div>
           </div>
         </div>
-        <div class="hero-card">
-          <div class="metric-grid">
-            <article class="metric-card">
-              <span class="metric-label">Judge Mode</span>
-              <strong>Stubbed AC</strong>
-            </article>
-            <article class="metric-card">
-              <span class="metric-label">Languages</span>
-              <strong>C++ / Java / Python</strong>
-            </article>
-            <article class="metric-card">
-              <span class="metric-label">Access</span>
-              <strong>JWT + Role Guard</strong>
-            </article>
-            <article class="metric-card">
-              <span class="metric-label">Frontend</span>
-              <strong>Vanilla HTML / CSS / JS</strong>
-            </article>
+
+        <div class="home-grid">
+          <div class="home-main">
+            <section class="home-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">News</p>
+                  <h2>Announcements</h2>
+                </div>
+              </div>
+              <div class="table-shell">
+                <table class="problem-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="announcement-body"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="home-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Catalog</p>
+                  <h2>Latest Problems</h2>
+                </div>
+                <button class="ghost-button small-button" data-view-target="problems">Open Board</button>
+              </div>
+              <div class="table-shell">
+                <table class="problem-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>Problem</th>
+                      <th>Limits</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="latest-problems-body"></tbody>
+                </table>
+              </div>
+            </section>
           </div>
+
+          <aside class="home-side">
+            <section class="home-widget">
+              <div class="widget-header">
+                <strong>One Line</strong>
+              </div>
+              <p class="quote-copy">"Small tools become serious tools when every repeated step stays visible."</p>
+              <p class="quote-author">- AlgoJudge Notes</p>
+            </section>
+
+            <section class="home-widget">
+              <div class="widget-header">
+                <strong>Quick Search</strong>
+              </div>
+              <div class="home-search-box">
+                <div class="search-box quick-search-input">
+                  <span class="search-icon">&#128269;</span>
+                  <input id="home-search-input" type="search" placeholder="Search by title or ID">
+                </div>
+                <button id="home-search-button" class="primary-button small-button" type="button">Search</button>
+              </div>
+            </section>
+
+            <section class="home-widget">
+              <div class="widget-header">
+                <strong>Quick Links</strong>
+              </div>
+              <ul class="link-list">
+                <li><button class="text-link" data-view-target="problems">Problem Board</button></li>
+                <li><button class="text-link" data-view-target="status">Submission Status</button></li>
+                <li><button class="text-link" id="open-auth-side">Account Access</button></li>
+              </ul>
+            </section>
+          </aside>
         </div>
       </section>
 
@@ -68,6 +150,34 @@
           </div>
           <button id="upload-button" class="primary-button hidden">Upload Problem</button>
         </div>
+
+        <section id="admin-review-section" class="board hidden">
+          <div class="toolbar admin-review-toolbar">
+            <div>
+              <strong>Admin review queue</strong>
+              <p class="subtle-copy">Review pending uploads, hide published problems, or remove outdated items.</p>
+            </div>
+            <div class="admin-counts">
+              <span class="feedback-pill">Pending <b id="admin-pending-count">0</b></span>
+              <span class="feedback-pill">Published <b id="admin-published-count">0</b></span>
+              <span class="feedback-pill">Hidden <b id="admin-hidden-count">0</b></span>
+            </div>
+          </div>
+          <div class="table-shell">
+            <table class="problem-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-review-body"></tbody>
+            </table>
+          </div>
+        </section>
 
         <div class="board">
           <div class="toolbar">
@@ -93,26 +203,61 @@
           </div>
         </div>
 
-        <div id="problem-detail" class="detail-card hidden"></div>
+        <div id="problem-detail" class="problem-detail-shell hidden"></div>
       </section>
 
-      <section class="status-grid hidden" data-panel="status">
-        <article class="status-card">
-          <span class="metric-label">Problems</span>
-          <strong id="status-problems">-</strong>
-        </article>
-        <article class="status-card">
-          <span class="metric-label">Submissions</span>
-          <strong id="status-submissions">-</strong>
-        </article>
-        <article class="status-card">
-          <span class="metric-label">Pending Judges</span>
-          <strong id="status-pending">-</strong>
-        </article>
-        <article class="status-card">
-          <span class="metric-label">Judger</span>
-          <strong id="status-judger">stubbed</strong>
-        </article>
+      <section class="workspace hidden" data-panel="status">
+        <div class="workspace-header">
+          <div>
+            <p class="eyebrow">Status</p>
+            <h2>Submission board</h2>
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <article class="status-card">
+            <span class="metric-label">Problems</span>
+            <strong id="status-problems">-</strong>
+          </article>
+          <article class="status-card">
+            <span class="metric-label">Submissions</span>
+            <strong id="status-submissions">-</strong>
+          </article>
+          <article class="status-card">
+            <span class="metric-label">Pending Judges</span>
+            <strong id="status-pending">-</strong>
+          </article>
+          <article class="status-card">
+            <span class="metric-label">Judger</span>
+            <strong id="status-judger">stubbed</strong>
+          </article>
+        </div>
+
+        <div class="board">
+          <div class="toolbar">
+            <div>
+              <strong>Recent submissions</strong>
+              <p class="subtle-copy">Shows the latest submissions for the signed-in user.</p>
+            </div>
+            <div id="status-hint" class="feedback-pill">Login required</div>
+          </div>
+          <div class="table-shell">
+            <table class="problem-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Problem</th>
+                  <th>Language</th>
+                  <th>Status</th>
+                  <th>Runtime</th>
+                  <th>Memory</th>
+                  <th>Submitted</th>
+                </tr>
+              </thead>
+              <tbody id="submission-table-body"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -124,7 +269,7 @@
           <p class="eyebrow">Account</p>
           <h3>Authenticate</h3>
         </div>
-        <button class="icon-button" value="cancel">×</button>
+        <button class="icon-button" value="cancel">&times;</button>
       </div>
 
       <div class="tabs">
@@ -155,7 +300,7 @@
           <p class="eyebrow">Admin</p>
           <h3>Upload problem</h3>
         </div>
-        <button class="icon-button" value="cancel">×</button>
+        <button class="icon-button" value="cancel">&times;</button>
       </div>
 
       <div class="grid-two">
@@ -174,10 +319,6 @@
           <span>Memory Limit (MB)</span>
           <input id="problem-memory" type="number" value="256">
         </label>
-        <label class="field">
-          <span>Sample Input</span>
-          <input id="sample-input" type="text" placeholder="1 2">
-        </label>
       </div>
 
       <label class="field">
@@ -185,16 +326,19 @@
         <textarea id="problem-description" rows="6" placeholder="Describe the problem..."></textarea>
       </label>
 
-      <label class="field">
-        <span>Sample Output</span>
-        <input id="sample-output" type="text" placeholder="3">
-      </label>
+      <section class="field">
+        <div class="field-header">
+          <span>Testcases</span>
+          <button id="add-upload-case" class="ghost-button small-button" type="button">Add Testcase</button>
+        </div>
+        <div id="upload-case-list" class="case-list"></div>
+      </section>
 
       <p id="upload-message" class="message"></p>
       <button id="upload-submit" class="primary-button wide" type="button">Publish Problem</button>
     </form>
   </dialog>
 
-  <script src="app.js"></script>
+  <script src="/assets/app.js"></script>
 </body>
 </html>

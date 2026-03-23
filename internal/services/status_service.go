@@ -1,12 +1,14 @@
-// Package service contains business rules and cross-repository orchestration.
-// service 包承载业务规则以及跨仓储的编排逻辑。
+// Package services contains business rules and cross-repository orchestration.
+// services 包承载业务规则以及跨仓储的编排逻辑。
 package services
 
 import "online-judge-backend/internal/repositories"
 
 type StatusService struct {
-	problems    *repositories.ProblemRepository
-	submissions *repositories.SubmissionRepository
+	problems     *repositories.ProblemRepository
+	submissions  *repositories.SubmissionRepository
+	queue        JudgeDispatcher
+	judgerStatus string
 }
 
 // SystemStatus is the admin-facing summary of backend activity.
@@ -17,12 +19,20 @@ type SystemStatus struct {
 	PendingJudges   int64  `json:"pending_judges"`
 	JudgerStatus    string `json:"judger_status"`
 	ConcurrentJobs  int    `json:"concurrent_jobs"`
+	QueueDepth      int    `json:"queue_depth"`
+	QueueCapacity   int    `json:"queue_capacity"`
+	WorkerCount     int    `json:"worker_count"`
 }
 
 // NewStatusService constructs the status aggregation service.
 // NewStatusService 构造系统状态聚合服务。
-func NewStatusService(problems *repositories.ProblemRepository, submissions *repositories.SubmissionRepository) *StatusService {
-	return &StatusService{problems: problems, submissions: submissions}
+func NewStatusService(problems *repositories.ProblemRepository, submissions *repositories.SubmissionRepository, queue JudgeDispatcher, judgerStatus string) *StatusService {
+	return &StatusService{
+		problems:     problems,
+		submissions:  submissions,
+		queue:        queue,
+		judgerStatus: judgerStatus,
+	}
 }
 
 // Get aggregates lightweight counts for the admin monitoring endpoint.
@@ -41,14 +51,15 @@ func (s *StatusService) Get() (SystemStatus, error) {
 		return SystemStatus{}, err
 	}
 
-	// The real judger/concurrency accounting does not exist yet, so the values
-	// are explicit placeholders instead of pretending to be measured data.
-	// 真实判题器和并发统计尚未实现，因此这里明确返回占位值，而不是伪造监控数据。
+	stats := s.queue.Stats()
 	return SystemStatus{
 		ProblemCount:    problemCount,
 		SubmissionCount: submissionCount,
 		PendingJudges:   pendingCount,
-		JudgerStatus:    "stubbed",
-		ConcurrentJobs:  0,
+		JudgerStatus:    s.judgerStatus,
+		ConcurrentJobs:  stats.BusyWorkers,
+		QueueDepth:      stats.QueueDepth,
+		QueueCapacity:   stats.QueueCapacity,
+		WorkerCount:     stats.WorkerCount,
 	}, nil
 }

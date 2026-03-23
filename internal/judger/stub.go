@@ -3,6 +3,8 @@
 package judger
 
 import (
+	"context"
+
 	"online-judge-backend/internal/models"
 	"online-judge-backend/internal/services"
 )
@@ -15,12 +17,9 @@ func NewStub() *Stub {
 	return &Stub{}
 }
 
-// Evaluate satisfies the judge interface while intentionally short-circuiting
-// execution and always returning AC.
-// Evaluate 满足判题接口，但会刻意短路真实执行并始终返回 AC。
-func (s *Stub) Evaluate(problem *models.Problem, submission *models.Submission, testCases []models.TestCase) (services.JudgeResult, error) {
-	// Runtime is made deterministic from code length so leaderboard behavior is testable.
-	// Runtime 根据代码长度给出确定性结果，方便测试排行榜行为。
+// Evaluate satisfies the judge interface while intentionally short-circuiting execution.
+// Evaluate 满足判题接口，但会刻意短路真实执行。
+func (s *Stub) Evaluate(_ context.Context, _ *models.Problem, submission *models.Submission, _ []models.TestCase) (services.JudgeResult, error) {
 	return services.JudgeResult{
 		Status:   models.SubmissionStatusAC,
 		Runtime:  1 + len(submission.Code)%100,
