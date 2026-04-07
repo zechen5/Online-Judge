@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoJudge Frontend Subset</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">&lt;/&gt;</span>
+        <div>
+          <strong>AlgoJudge</strong>
+          <p>Frontend-only subset</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-link is-active" data-view="home" type="button">Home</button>
+        <button class="nav-link" data-view="problems" type="button">Problems</button>
+        <button class="nav-link" data-view="status" type="button">Status</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <span id="mode-chip" class="mode-chip">Local mock mode</span>
+        <button id="auth-button" class="ghost-button" type="button">Login</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel-stack" data-panel="home">
+        <section class="hero-card">
+          <div class="hero-copy">
+            <p class="eyebrow">Standalone UI extract</p>
+            <h1>Preview the Online Judge frontend without the backend.</h1>
+            <p class="hero-text">
+              This subset keeps the current visual language, problem browsing flow,
+              local sign-in demo, and submission interactions, but runs entirely in the browser.
+            </p>
+            <div class="hero-actions">
+              <button class="primary-button" data-view-target="problems" type="button">Browse Problems</button>
+              <button class="ghost-button" id="open-auth-inline" type="button">Try Login</button>
+            </div>
+          </div>
+
+          <div class="hero-metrics">
+            <article class="metric-card">
+              <span class="metric-label">Runtime</span>
+              <strong>Pure static assets</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">State</span>
+              <strong>Browser localStorage</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Flow</span>
+              <strong>Problems + Status + Demo Auth</strong>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Purpose</span>
+              <strong>Frontend review / showcase</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="grid grid-home">
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Project slice</p>
+                <h2>What is included</h2>
+              </div>
+            </div>
+            <ul class="feature-list">
+              <li>Problem list, search, and detail preview</li>
+              <li>Submission composer with mock verdict generation</li>
+              <li>Recent submission board stored in the browser</li>
+              <li>Local login/register demo with role badge rendering</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Announcements</p>
+                <h2>Latest notes</h2>
+              </div>
+            </div>
+            <div id="announcement-list" class="announcement-list"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="panel-stack hidden" data-panel="problems">
+        <section class="workspace-header">
+          <div>
+            <p class="eyebrow">Problem Set</p>
+            <h2>Frontend-only problem board</h2>
+          </div>
+          <div class="toolbar">
+            <label class="search-shell">
+              <span>Search</span>
+              <input id="problem-search" type="search" placeholder="Search by title or ID">
+            </label>
+          </div>
+        </section>
+
+        <section class="grid grid-problems">
+          <article class="card board-card">
+            <table class="problem-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Difficulty</th>
+                  <th>Limits</th>
+                </tr>
+              </thead>
+              <tbody id="problem-table-body"></tbody>
+            </table>
+          </article>
+
+          <article class="card detail-card">
+            <div id="problem-detail"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="panel-stack hidden" data-panel="status">
+        <section class="workspace-header">
+          <div>
+            <p class="eyebrow">Status</p>
+            <h2>Recent mock submissions</h2>
+          </div>
+          <div class="status-strip">
+            <article class="metric-card compact">
+              <span class="metric-label">Problems</span>
+              <strong id="status-problem-count">0</strong>
+            </article>
+            <article class="metric-card compact">
+              <span class="metric-label">Submissions</span>
+              <strong id="status-submission-count">0</strong>
+            </article>
+            <article class="metric-card compact">
+              <span class="metric-label">Accepted</span>
+              <strong id="status-accepted-count">0</strong>
+            </article>
+          </div>
+        </section>
+
+        <article class="card">
+          <table class="problem-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Problem</th>
+                <th>Language</th>
+                <th>Verdict</th>
+                <th>Runtime</th>
+                <th>Memory</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="submission-table-body"></tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="auth-dialog" class="dialog">
+    <div class="dialog-card">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">Local session</p>
+          <h3 id="auth-title">Login</h3>
+        </div>
+        <button id="close-auth" class="icon-button" type="button" aria-label="Close">x</button>
+      </div>
+
+      <div class="tab-row">
+        <button id="login-tab" class="tab-button is-active" type="button">Login</button>
+        <button id="register-tab" class="tab-button" type="button">Register</button>
+      </div>
+
+      <label class="field">
+        <span>Username</span>
+        <input id="auth-username" type="text" autocomplete="username" placeholder="demo_user">
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input id="auth-password" type="password" autocomplete="current-password" placeholder="password">
+      </label>
+
+      <label class="field checkbox-field">
+        <input id="auth-admin" type="checkbox">
+        <span>Create as admin demo user</span>
+      </label>
+
+      <p id="auth-message" class="message"></p>
+
+      <div class="dialog-actions">
+        <button id="auth-submit" class="primary-button wide" type="button">Login</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
