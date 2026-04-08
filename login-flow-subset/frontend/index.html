@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoJudge Login Flow Subset</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Online Judge subset</p>
+        <h1>Login flow demo</h1>
+      </div>
+      <div class="topbar-actions">
+        <span id="session-chip" class="session-chip">Signed out</span>
+        <button id="logout-button" class="ghost-button hidden" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="hero card">
+        <div>
+          <p class="eyebrow">What is real</p>
+          <h2>Frontend plus real auth backend</h2>
+          <p class="copy">
+            Registration, login, JWT verification, and current-user lookup all go
+            through the subset backend. The problem cards below stay mocked so the
+            package remains small and focused.
+          </p>
+        </div>
+        <div class="hero-badges">
+          <span class="badge">Gin</span>
+          <span class="badge">JWT</span>
+          <span class="badge">SQLite</span>
+          <span class="badge">Static frontend</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Auth</p>
+              <h2 id="auth-title">Login</h2>
+            </div>
+            <div class="tab-row">
+              <button id="login-tab" class="tab-button is-active" type="button">Login</button>
+              <button id="register-tab" class="tab-button" type="button">Register</button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <label class="field">
+              <span>Username</span>
+              <input id="auth-username" type="text" placeholder="admin">
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input id="auth-password" type="password" placeholder="admin123456">
+            </label>
+            <p class="hint">Default admin: <code>admin / admin123456</code></p>
+            <p id="auth-message" class="message"></p>
+            <button id="auth-submit" class="primary-button wide" type="button">Login</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Session</p>
+              <h2>Current user</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="session-panel" class="session-panel">
+              <p class="copy">No active session.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Mock board</p>
+            <h2>Problems kept from the frontend slice</h2>
+          </div>
+        </div>
+        <div id="problem-list" class="problem-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
