@@ -1,0 +1,245 @@
+:root {
+  --bg: #f3f6fb;
+  --surface: rgba(255, 255, 255, 0.84);
+  --stroke: rgba(74, 108, 161, 0.14);
+  --text: #182444;
+  --muted: #62759b;
+  --primary: #1f67f2;
+  --primary-deep: #0f3c97;
+  --success: #1d966d;
+  --danger: #c34a4a;
+  --shadow: 0 24px 64px rgba(37, 69, 121, 0.12);
+  --radius-xl: 28px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  font-family: "Bahnschrift", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(84, 134, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(97, 168, 255, 0.15), transparent 20%),
+    linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 32px;
+}
+
+.topbar h1,
+.section-head h2 {
+  margin: 0;
+}
+
+.eyebrow,
+.copy,
+.hint,
+.message {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.copy,
+.hint {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.layout {
+  width: min(1080px, calc(100% - 32px));
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.hero {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-badges,
+.tab-row,
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge,
+.session-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(31, 103, 242, 0.08);
+  color: var(--primary-deep);
+}
+
+.section-head,
+.card-body {
+  padding: 20px 22px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid rgba(74, 108, 161, 0.1);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid rgba(74, 108, 161, 0.18);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.primary-button,
+.ghost-button,
+.tab-button {
+  padding: 11px 16px;
+  border-radius: 999px;
+  transition: 180ms ease;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--primary) 0%, #5e94ff 100%);
+  color: #fff;
+}
+
+.ghost-button,
+.tab-button {
+  background: rgba(31, 103, 242, 0.08);
+  color: var(--primary-deep);
+}
+
+.tab-button.is-active {
+  background: linear-gradient(135deg, var(--primary) 0%, #5e94ff 100%);
+  color: #fff;
+}
+
+.wide {
+  width: 100%;
+}
+
+.message {
+  min-height: 20px;
+}
+
+.message.success {
+  color: var(--success);
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.session-panel,
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.session-box,
+.problem-card {
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(74, 108, 161, 0.1);
+}
+
+.problem-card h3,
+.session-box h3 {
+  margin: 0 0 6px;
+}
+
+.problem-card p,
+.problem-card strong,
+.session-box p {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .topbar,
+  .section-head,
+  .grid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
